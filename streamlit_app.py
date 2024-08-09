@@ -1,7 +1,6 @@
 # Import python packages
 import streamlit as st
 import requests
-#from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
 
@@ -22,14 +21,13 @@ ingredients_list = st.multiselect(
     max_selections = 5
 )
 
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-#st.text(fruityvice_response)
-fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
-
 if ingredients_list:
     ingredients_string = ''
     for each_fruit in ingredients_list:
         ingredients_string += each_fruit + ' '
+        st.subheaader(each_fruit + "Nutrition Information")
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + each_fruit)
+        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
     #st.write(ingredients_string)
 
